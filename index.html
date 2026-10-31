@@ -1,196 +1,81 @@
+
 <!DOCTYPE html>
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Şarkı Arşivi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Şarkılarım</title>
 
 <style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
-    background: #080808;
+    background: #111;
     color: white;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
-    padding: 40px 20px;
-}
-
-header {
+    font-family: Arial;
     text-align: center;
-    margin-bottom: 40px;
-}
-
-header h1 {
-    font-size: 32px;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
-}
-
-header p {
-    color: #888;
-}
-
-.container {
-    max-width: 600px;
-    margin: auto;
+    padding: 20px;
 }
 
 .song {
-    background: #151515;
-    border: 1px solid #292929;
-    border-radius: 15px;
-    padding: 22px;
-    margin-bottom: 18px;
-    transition: 0.3s;
-}
-
-.song:hover {
-    border-color: #666;
-    transform: translateY(-3px);
-}
-
-.song h2 {
-    font-size: 20px;
-    margin-bottom: 17px;
-}
-
-.upload {
-    display: inline-block;
-    background: white;
-    color: black;
-    padding: 11px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.upload:hover {
-    background: #bbb;
-}
-
-input[type="file"] {
-    display: none;
-}
-
-.filename {
-    color: #999;
-    font-size: 13px;
-    margin-top: 12px;
-    word-break: break-word;
+    background: #222;
+    padding: 15px;
+    margin: 15px auto;
+    max-width: 400px;
+    border-radius: 10px;
 }
 
 audio {
-    display: none;
     width: 100%;
-    margin-top: 17px;
-    height: 42px;
+    margin: 10px 0;
 }
 
-footer {
-    text-align: center;
-    color: #555;
-    margin-top: 40px;
-    font-size: 12px;
+a {
+    display: inline-block;
+    background: white;
+    color: black;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <h1>🎵 ŞARKI ARŞİVİ</h1>
-    <p>En sevdiğin şarkıları yükle ve dinle</p>
-</header>
+<h1>Şarkılarım</h1>
 
-<div class="container">
-
-    <div class="song">
-        <h2>01. Felek</h2>
-        <label class="upload" for="song1">🎵 Şarkı Yükle</label>
-        <input type="file" id="song1" accept="audio/*">
-        <div class="filename" id="name1">Henüz şarkı yüklenmedi</div>
-        <audio id="player1" controls></audio>
-    </div>
-
-    <div class="song">
-        <h2>02. Yanımda sen olmayınca</h2>
-        <label class="upload" for="song2">🎵 Şarkı Yükle</label>
-        <input type="file" id="song2" accept="audio/*">
-        <div class="filename" id="name2">Henüz şarkı yüklenmedi</div>
-        <audio id="player2" controls></audio>
-    </div>
-
-    <div class="song">
-        <h2>03. Ah gardaş</h2>
-        <label class="upload" for="song3">🎵 Şarkı Yükle</label>
-        <input type="file" id="song3" accept="audio/*">
-        <div class="filename" id="name3">Henüz şarkı yüklenmedi</div>
-        <audio id="player3" controls></audio>
-    </div>
-
-    <div class="song">
-        <h2>04. Diyardan Diyara</h2>
-        <label class="upload" for="song4">🎵 Şarkı Yükle</label>
-        <input type="file" id="song4" accept="audio/*">
-        <div class="filename" id="name4">Henüz şarkı yüklenmedi</div>
-        <audio id="player4" controls></audio>
-    </div>
-
-    <div class="song">
-        <h2>05. Isırgan otu</h2>
-        <label class="upload" for="song5">🎵 Şarkı Yükle</label>
-        <input type="file" id="song5" accept="audio/*">
-        <div class="filename" id="name5">Henüz şarkı yüklenmedi</div>
-        <audio id="player5" controls></audio>
-    </div>
-
-</div>
-
-<footer>
-    © 2026 Şarkı Arşivi
-</footer>
+<div id="songs"></div>
 
 <script>
-for (let i = 1; i <= 5; i++) {
+const songs = [
+    ["Felek", "Felek.mp3"],
+    ["Yanımda sen olmayınca", "Yanimda-Sen-Olmayinca.mp3"],
+    ["Ah gardaş", "Ah-Gardas.mp3"],
+    ["Diyardan Diyara", "Diyardan-Diyara.mp3"],
+    ["Isırgan otu", "Isirgan-Otu.mp3"]
+];
 
-    const input = document.getElementById("song" + i);
-    const player = document.getElementById("player" + i);
-    const name = document.getElementById("name" + i);
+const container = document.getElementById("songs");
 
-    let currentUrl = null;
+songs.forEach(song => {
+    const div = document.createElement("div");
+    div.className = "song";
 
-    input.addEventListener("change", function() {
+    const title = document.createElement("h3");
+    title.textContent = song[0];
 
-        const file = this.files[0];
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.src = song[1];
 
-        if (!file) return;
+    const download = document.createElement("a");
+    download.href = song[1];
+    download.download = song[1];
+    download.textContent = "⬇ Şarkıyı İndir";
 
-        if (!file.type.startsWith("audio/")) {
-            alert("Lütfen bir ses dosyası seç!");
-            this.value = "";
-            return;
-        }
-
-        if (currentUrl) {
-            URL.revokeObjectURL(currentUrl);
-        }
-
-        currentUrl = URL.createObjectURL(file);
-
-        player.src = currentUrl;
-        player.style.display = "block";
-
-        name.textContent = "Yüklendi: " + file.name;
-
-    });
-}
+    div.append(title, audio, document.createElement("br"), download);
+    container.appendChild(div);
+});
 </script>
 
 </body>
